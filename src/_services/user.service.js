@@ -1,5 +1,10 @@
 import config from 'config';
 import { authHeader } from '../_helpers';
+import Parse from 'parse';
+
+Parse.serverURL = 'http://localhost:1337/parse';
+
+Parse.initialize("POLLS", "BLOCKCHAIN")
 
 export const userService = {
     login,
@@ -18,6 +23,11 @@ function login(username, password) {
         body: JSON.stringify({ username, password })
     };
 
+    let user = Parse.User.logIn(username,password).then(user =>{
+        console.log(user)
+    });
+
+
     return fetch(`${config.apiUrl}/users/authenticate`, requestOptions)
         .then(handleResponse)
         .then(user => {
@@ -31,6 +41,7 @@ function login(username, password) {
 function logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('user');
+    Parse.User.logOut();
 }
 
 function getAll() {
@@ -57,6 +68,14 @@ function register(user) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
     };
+
+    //console.log(JSON.stringify(user))
+    console.log(user)
+     //let params = {username: user.username, password: user.password, gender: user.gender, age: '30', city: 'Ramat Gan', origin: 'Ukraine', groups: ['citizen','afeka'], secret: 'kokopoposhosho'};
+       Parse.Cloud.run('createUser', user).then(res => {
+           console.log(res);
+       });
+
 
     return fetch(`${config.apiUrl}/users/register`, requestOptions).then(handleResponse);
 }

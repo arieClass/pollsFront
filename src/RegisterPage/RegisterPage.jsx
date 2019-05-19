@@ -11,6 +11,8 @@ class RegisterPage extends React.Component {
             user: {
                 gender: '',
                 city: '',
+                country:'',
+                religion:'',
                 birthDate: '',
                 secret: '',
                 username: '',
