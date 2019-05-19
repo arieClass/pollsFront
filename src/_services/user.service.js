@@ -1,6 +1,8 @@
 import config from 'config';
 import { authHeader } from '../_helpers';
 import Parse from 'parse';
+import 'babel-polyfill'
+import React from "react";
 
 Parse.serverURL = 'http://localhost:1337/parse';
 
@@ -15,6 +17,8 @@ export const userService = {
     update,
     delete: _delete
 };
+
+
 
 function login(username, password) {
     const requestOptions = {
@@ -44,11 +48,13 @@ function logout() {
     Parse.User.logOut();
 }
 
-function getAll() {
+async function getAll() {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
+
+
 
     return fetch(`${config.apiUrl}/users`, requestOptions).then(handleResponse);
 }
@@ -100,7 +106,8 @@ function _delete(id) {
     return fetch(`${config.apiUrl}/users/${id}`, requestOptions).then(handleResponse);
 }
 
-function handleResponse(response) {
+async function handleResponse(response) {
+    let users = await parseUsers();
     return response.text().then(text => {
         const data = text && JSON.parse(text);
         if (!response.ok) {
@@ -113,7 +120,28 @@ function handleResponse(response) {
             const error = (data && data.message) || response.statusText;
             return Promise.reject(error);
         }
-
-        return data;
+        //console.log(data)
+       //  let idx = 0;
+       //  let tmp;
+       //  let finalData = [];
+       // for(let ids in users){
+       //     let name = users[ids][0];
+       //     let city = users[ids][1]
+       //     let id = idx++;
+       //     tmp = {username: name, city: city, id: id};
+       //     finalData.push(tmp);
+       // }
+       //  return finalData;
+        return users;
     });
+}
+
+async function parseUsers() {
+
+     let res = await Parse.Cloud.run('getUsers');
+
+     return res;
+
+
+
 }

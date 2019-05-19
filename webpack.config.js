@@ -3,6 +3,8 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     mode: 'development',
 
+    entry: ['babel-regenerator-runtime', './src/index.jsx'],
+
     resolve: {
         extensions: ['.js', '.jsx']
     },
