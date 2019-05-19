@@ -2,6 +2,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     mode: 'development',
+
     resolve: {
         extensions: ['.js', '.jsx']
     },
@@ -16,8 +17,11 @@ module.exports = {
     plugins: [new HtmlWebpackPlugin({
         template: './src/index.html'
     })],
+
     devServer: {
-        historyApiFallback: true
+        historyApiFallback: true,
+        inline:true,
+        port: 8008
     },
     externals: {
         // global app config object
