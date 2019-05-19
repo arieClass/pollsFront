@@ -2,12 +2,35 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { userActions } from '../_actions';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import SimpleSelect from "./SelectorComponent";
+
+
+const styles = theme => ({
+    root: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    formControl: {
+        margin: theme.spacing.unit,
+        minWidth: 120,
+        display: 'flex',
+        flexWrap: 'wrap'
+    },
+    selectEmpty: {
+        marginTop: theme.spacing.unit * 2,
+    },
+});
 
 class RegisterPage extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            gender: 'male',
             user: {
                 gender: '',
                 city: '',
@@ -24,7 +47,9 @@ class RegisterPage extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-
+    handleChangePicker = event => {
+        this.setState({ [event.target.name]: event.target.value });
+    };
     handleChange(event) {
         const { name, value } = event.target;
         const { user } = this.state;
@@ -48,6 +73,7 @@ class RegisterPage extends React.Component {
     }
 
     render() {
+        const  classes  = styles;
         const { registering  } = this.props;
         const { user, submitted } = this.state;
         return (
@@ -60,7 +86,30 @@ class RegisterPage extends React.Component {
                             <option value="male">Male</option>
                             <option value="female">Female</option>
                         </select>
+
                         {/* <input type="text" className="form-control" name="gender" value={user.gender} onChange={this.handleChange} /> */}
+
+                            {/*<FormControl className={classes.formControl}>*/}
+                            {/*    <InputLabel htmlFor="gender-simple">Gender</InputLabel>*/}
+                            {/*    <Select*/}
+                            {/*        value={10}*/}
+                            {/*        onChange={this.handleChangePicker}*/}
+                            {/*        inputProps={{*/}
+                            {/*            name: 'gender',*/}
+                            {/*            id: 'gender',*/}
+                            {/*        }}*/}
+                            {/*    >*/}
+
+                            {/*        <MenuItem value={10}>Male</MenuItem>*/}
+                            {/*        <MenuItem value={20}>Female</MenuItem>*/}
+
+                            {/*    </Select>*/}
+                            {/*</FormControl>*/}
+
+                            {/*<SimpleSelect/>*/}
+
+
+
                         {submitted && !user.gender &&
                             <div className="help-block">Gender is required</div>
                         }
