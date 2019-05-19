@@ -51,7 +51,7 @@ function logout() {
 async function getAll() {
     const requestOptions = {
         method: 'GET',
-        headers: authHeader()
+        headers: await authHeader()
     };
 
 
@@ -74,6 +74,7 @@ function register(user) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
     };
+
 
        Parse.Cloud.run('createUser', user).then(res => {
            console.log(res);
@@ -104,21 +105,24 @@ function _delete(id) {
 }
 
 async function handleResponse(response) {
-    // return response.text().then(text => {
-    //     const data = text && JSON.parse(text);
-    //     if (!response.ok) {
-    //         if (response.status === 401) {
-    //             // auto logout if 401 response returned from api
-    //             Parse.User.logOut();
-    //             location.reload(true);
-    //         }
-    //
-    //         const error = (data && data.message) || response.statusText;
-    //         return Promise.reject(error);
-    //     }
-    //
-    //
-    // });
-    return await Parse.Cloud.run('getUsers');
+    let users = await Parse.Cloud.run('getUsers');
+
+    return response.text().then(text => {
+        const data = text && JSON.parse(text);
+
+        if (!response.ok) {
+            if (response.status === 401) {
+                // auto logout if 401 response returned from api
+               // Parse.User.logOut();
+                location.reload(true);
+            }
+
+            const error = (data && data.message) || response.statusText;
+            return Promise.reject(error);
+        }
+
+        return data;
+    })
+
 }
 
