@@ -75,9 +75,6 @@ function register(user) {
         body: JSON.stringify(user)
     };
 
-    //console.log(JSON.stringify(user))
-    console.log(user)
-     //let params = {username: user.username, password: user.password, gender: user.gender, age: '30', city: 'Ramat Gan', origin: 'Ukraine', groups: ['citizen','afeka'], secret: 'kokopoposhosho'};
        Parse.Cloud.run('createUser', user).then(res => {
            console.log(res);
        });
@@ -107,41 +104,21 @@ function _delete(id) {
 }
 
 async function handleResponse(response) {
-    let users = await parseUsers();
-    return response.text().then(text => {
-        const data = text && JSON.parse(text);
-        if (!response.ok) {
-            if (response.status === 401) {
-                // auto logout if 401 response returned from api
-                logout();
-                location.reload(true);
-            }
-
-            const error = (data && data.message) || response.statusText;
-            return Promise.reject(error);
-        }
-        //console.log(data)
-       //  let idx = 0;
-       //  let tmp;
-       //  let finalData = [];
-       // for(let ids in users){
-       //     let name = users[ids][0];
-       //     let city = users[ids][1]
-       //     let id = idx++;
-       //     tmp = {username: name, city: city, id: id};
-       //     finalData.push(tmp);
-       // }
-       //  return finalData;
-        return users;
-    });
+    // return response.text().then(text => {
+    //     const data = text && JSON.parse(text);
+    //     if (!response.ok) {
+    //         if (response.status === 401) {
+    //             // auto logout if 401 response returned from api
+    //             Parse.User.logOut();
+    //             location.reload(true);
+    //         }
+    //
+    //         const error = (data && data.message) || response.statusText;
+    //         return Promise.reject(error);
+    //     }
+    //
+    //
+    // });
+    return await Parse.Cloud.run('getUsers');
 }
 
-async function parseUsers() {
-
-     let res = await Parse.Cloud.run('getUsers');
-
-     return res;
-
-
-
-}

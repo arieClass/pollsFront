@@ -56,8 +56,8 @@ class RegisterPage extends React.Component {
                 <form name="form" onSubmit={this.handleSubmit}>
                     <div className={'form-group' + (submitted && !user.gender ? ' has-error' : '')}>
                         <label htmlFor="gender">Gender</label><br/>
-                        <select name="gender" className="form-control" onChange={this.handleChange}>
-                            <option value="male" selected="selected">Male</option>
+                        <select name="gender" className="form-control" defaultValue="male" onChange={this.handleChange}>
+                            <option value="male">Male</option>
                             <option value="female">Female</option>
                         </select>
                         {/* <input type="text" className="form-control" name="gender" value={user.gender} onChange={this.handleChange} /> */}
